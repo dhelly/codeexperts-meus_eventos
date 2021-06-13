@@ -33,7 +33,12 @@ Curso de laravel da plataforma [Code Experts](https://codeexperts.com.br/). Inst
 - Criando um model
 > php artisan make:model Event
 
+---
+Trabalhando com factory e Seeds
+Criando uma factory
+> php artisan make:factory EventFactory
 
+Lembrando que a Factory fica conectada ao nosso Model, nesse caso *Event*
 
 ## Licença
 
