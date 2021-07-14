@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Event;
+use App\Models\Photo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class EventFactory extends Factory
+class PhotoFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Event::class;
+    protected $model = Photo::class;
 
     /**
      * Define the model's default state.
@@ -21,14 +21,8 @@ class EventFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->sentence;
-
         return [
-            "title" => $name,
-            "description" => $this->faker->sentence(),
-            "body" => $this->faker->paragraph,
-            "start_event" => now(),
-            "slug" => \Str::slug($name),
+            'photo' => $this->faker->imageUrl(),
         ];
     }
 }

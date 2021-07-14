@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Event;
+use App\Models\Profile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class EventFactory extends Factory
+class ProfileFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Event::class;
+    protected $model = Profile::class;
 
     /**
      * Define the model's default state.
@@ -21,14 +21,11 @@ class EventFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->sentence;
-
         return [
-            "title" => $name,
-            "description" => $this->faker->sentence(),
-            "body" => $this->faker->paragraph,
-            "start_event" => now(),
-            "slug" => \Str::slug($name),
+            'about' => $this->faker->paragraph,
+            'phone' => $this->faker->numerify('(##) #####-####'),
+            // 'phone' => $this->faker->phoneNumber,
+            'social_networks' => 'facebook-twitter-instagram'
         ];
     }
 }

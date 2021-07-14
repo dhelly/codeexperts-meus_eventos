@@ -100,6 +100,76 @@ Criando a tabela *profile*
             $table->timestamps();
         });
 
+### Criando novas factores e usando o tinker
+
+> php artisan make:factory PhotoFactory
+
+Método *Definition*
+
+	'photo' => $this->faker->imageUrl(),
+
+> php artisan make:factory ProfileFactory
+
+Método *Definition*
+
+	'about' => $this->faker->paragraph,
+	'phone' => $this->faker->phoneNumber,
+	'social_network' => 'facebook-twitter-instagram'
+
+No tinker
+
+> namespace App\Models
+
+Gerando via factory dados, mas não persiste como utilizado com o métido *create()*
+> Photo::factory()->make()
+
+Usando as factores como relacionamento entre as tabelas
+
+Criando um evento com três fotos
+> Event::factory()->has(Photo::factory(3))->create()
+
+Método *has* pode ser usado tanto para relacionamento 1:1, 1:n e n:m
+Pode ser simplificado
+
+> Event::factory()->hasPhotos(3)->create()
+
+Photos representa o nome do método photos() no nosso model. Ele é responsável pela ligação com eventos
+
+Usuário com profile
+> User::factory()->has(Profile::factory())->create()
+
+Alternativa
+> User::factory()->hasProfile()->create()
+
+Criando um usuário com um perfil vinculado
+> Profile::factory()->for(User::factory())->create()
+
+Alternativa
+> Profile::factory()->forUser()->create()
+
+#### Incrementando nossas seeds
+
+Event:
+
+	Event::factory(30)
+				->hasPhotos(4)
+				->hasCategories(3)
+				->create();
+
+User
+
+	User::factory(50)
+			->hasProfile()
+			->create();
+			
+Para executar:
+> php artisan migrate:fresh e php artisan db:seed
+
+ou
+> php artisan migrate:fresh --seed
+
+
+
 
 ## Licença
 
