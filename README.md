@@ -168,6 +168,30 @@ Para executar:
 ou
 > php artisan migrate:fresh --seed
 
+### Blade
+
+Passando valores nas rotas
+
+	Route::get('/', function () {
+	    $events = Event::all();
+	    return view('welcome', [
+		'events' => $events
+	    ]);
+	});
+
+outra opção é usando a função *compact()* do php
+
+	Route::get('/', function () {
+	    $events = Event::all();
+	    return view('welcome', compact('events'));
+	});
+
+
+Resolvendo problema da função *format()* para o **start_event** do Model Event e transformar o start_event em uma instância do carbon
+
+Model Event:
+
+	protected $dates = ['start_event'];
 
 
 

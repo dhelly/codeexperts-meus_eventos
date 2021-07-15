@@ -1,27 +1,41 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@extends('layout.site')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('title') Listagem de Eventos @endsection
 
-    <title>Laravel</title>
+@section('content')
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            padding: 0;
-        }
+    <div class="row">
+        <div class="col-12">
+            <h2>Eventos</h2>
+            <hr>
+        </div>
+    </div>
 
-        body {
-            font-family: Nunito, sans-serif;
-        }
-    </style>
-</head>
+    <div class="row mb-4">
+        @forelse ($events as $event)
+            <div class="col-4">
+                <div class="card">
+                    <img src="https://via.placeholder.com/1024x480.png/001177?text=Sem+Image" alt="" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $event->title }}</h5>
+                        <strong>Acontece em {{ $event->start_event->format('d/m/Y H:i:s') }}</strong>
+                        <p class="card-text">{{ $event->description }}</p>
 
-<body class="antialiased">
-    <h1>Hello World</h1>
-</body>
+                        <a href="/eventos/{{ $event->slug }}" class="btn btn-outline-dark">Ver Evento</a>
+                    </div>
+                </div>
+            </div>
 
-</html>
+            @if (($loop->iteration % 3) == 0)
+                </div><div class="row mb-4">
+            @endif
+        @empty
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    Nenhum evento encontrado...
+                </div>
+            </div>
+        @endforelse
+        </ul>
+    </div>
+@endsection

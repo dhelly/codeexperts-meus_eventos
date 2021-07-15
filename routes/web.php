@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\HomeController;
+use App\Models\Event;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,10 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     $events = Event::all();
+//     return view('welcome', [
+//         'events' => $events
+//     ]);
+// });
 
+// Home
+Route::get('/', [HomeController::class, 'index']);
+Route::get('eventos/{slug}', [HomeController::class, 'show']);
+
+// Event
 Route::get('/events/index', [EventController::class, 'index']);
 Route::get('/events/store', [EventController::class, 'store']);
 Route::get('/events/update/{event}', [EventController::class, 'update']);
