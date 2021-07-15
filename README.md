@@ -193,7 +193,10 @@ Model Event:
 
 	protected $dates = ['start_event'];
 
+No blade:
 
+	<strong>{{ $event->start_event->format('d/m/Y H:i:s') }}</strong>
+	
 
 ## Licença
 
