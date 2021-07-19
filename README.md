@@ -199,6 +199,14 @@ No blade:
 
 ### Formulários
 
+Para usar a paginação do bootstrap temos que modificar
+
+1 - abrir o arquivo `app\Providers\AppServiceProvider.php`
+2 - adicionar ao método `register`:
+
+	Paginator::useBootstrap();
+	
+
 
 
 
