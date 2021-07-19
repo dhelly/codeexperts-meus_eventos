@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
-use App\Models\Event;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +26,12 @@ Route::get('/', [HomeController::class, 'index']);
 Route::get('eventos/{slug}', [HomeController::class, 'show']);
 
 // Event
-Route::get('/events/index', [EventController::class, 'index']);
-Route::get('/events/store', [EventController::class, 'store']);
-Route::get('/events/update/{event}', [EventController::class, 'update']);
-Route::get('/events/destroy/{event}', [EventController::class,'destroy']);
+Route::get('/admin/events/index', [\App\Http\Controllers\Admin\EventController::class, 'index']);
+
+Route::get('/admin/events/create', [\App\Http\Controllers\Admin\EventController::class, 'create']);
+Route::post('/admin/events/store', [\App\Http\Controllers\Admin\EventController::class, 'store']);
+
+Route::get('/admin/events/{event}/edit', [\App\Http\Controllers\Admin\EventController::class, 'edit']);
+Route::post('/admin/events/update/{event}', [\App\Http\Controllers\Admin\EventController::class, 'update']);
+
+Route::get('/admin/events/destroy/{event}', [\App\Http\Controllers\Admin\EventController::class,'destroy']);

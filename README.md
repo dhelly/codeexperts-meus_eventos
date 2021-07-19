@@ -196,7 +196,11 @@ Model Event:
 No blade:
 
 	<strong>{{ $event->start_event->format('d/m/Y H:i:s') }}</strong>
-	
+
+### Formulários
+
+
+
 
 ## Licença
 
