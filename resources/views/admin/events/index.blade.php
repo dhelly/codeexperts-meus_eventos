@@ -28,7 +28,7 @@
                             <td>{{ $event->created_at->format('d/m/Y H:i:s') }}</td>
                             <td>
                                 <a href="/admin/events/{{ $event->id }}/edit" class="btn btn-warning">Editar</a>
-                                <a href="/admin/events/destroy/{{ $event->id }}" class="btn btn-danger">Remover</a>
+                                <a href="/admin/events/destroy/{{ $event->id }}" class="btn btn-danger" onclick="return confirm('Você deseja realmente remover este item')">Remover</a>
                             </td>
                         </tr>
                     @empty
