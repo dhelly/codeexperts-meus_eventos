@@ -90,15 +90,15 @@ Criando a tabela *profile*
 > php artisan make:model Profile -m
 
 	Schema::create('profiles', function (Blueprint $table) {
-            $table->id();
+        $table->id();
 
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+        $table->foreignId('user_id')->constrained()->cascadeOnDelete();
 
-            $table->text('about')->nullable();
-            $table->string('phone', 15)->nullable();
-            $table->text('social_network')->nullable();
-            $table->timestamps();
-        });
+        $table->text('about')->nullable();
+        $table->string('phone', 15)->nullable();
+        $table->text('social_network')->nullable();
+        $table->timestamps();
+    });
 
 ### Criando novas factores e usando o tinker
 
@@ -152,15 +152,15 @@ Alternativa
 Event:
 
 	Event::factory(30)
-				->hasPhotos(4)
-				->hasCategories(3)
-				->create();
+        ->hasPhotos(4)
+        ->hasCategories(3)
+        ->create();
 
 User
 
 	User::factory(50)
-			->hasProfile()
-			->create();
+        ->hasProfile()
+        ->create();
 			
 Para executar:
 > php artisan migrate:fresh e php artisan db:seed
@@ -261,29 +261,29 @@ Nos controles
 Nas views:
 
 	<div class="form-group mb-2">
-            <label>Titulo do Evento</label>
-            <input type="text" name="title" class="form-control {{ ($errors->has('title') ? 'is-invalid' : '') }}">
+        <label>Titulo do Evento</label>
+        <input type="text" name="title" class="form-control {{ ($errors->has('title') ? 'is-invalid' : '') }}">
 
-            @error('title')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-            @enderror
+        @error('title')
+            <div class="invalid-feedback">
+                {{ $message }}
+            </div>
+        @enderror
 
-        </div>
+    </div>
 
-        <div class="form-group my-2">
-            <label>Descrição Rápida</label>
-            <input type="text" name="description" class="form-control {{ ($errors->has('description') ? 'is-invalid' : '') }}">
+    <div class="form-group my-2">
+        <label>Descrição Rápida</label>
+        <input type="text" name="description" class="form-control {{ ($errors->has('description') ? 'is-invalid' : '') }}">
 
-            @if ($errors->has('description'))
-                <div class="invalid-feedback">
-                    @foreach ($errors->get('description') as $error)
-                        {{ $error }}
-                    @endforeach
-                </div>
-            @endif
-        </div>
+        @if ($errors->has('description'))
+            <div class="invalid-feedback">
+                @foreach ($errors->get('description') as $error)
+                    {{ $error }}
+                @endforeach
+            </div>
+        @endif
+    </div>
 
 Lembrado que no Laravel existe várias formas para se chegar ao mesmo resultado, no exemplo acima mostramos duas formas.
 
@@ -317,6 +317,16 @@ Sobrescrevemos o método *message()* no request e adicionamos nossa tradução
 
 Agora a validação foi entrega para uma camada acima para fazer o serviço.
 
+
+### Controllers como Recurso
+
+Criando um controller com o resource defindo
+
+>php artisan make:controler Event --resource
+ou
+>php artisan make:controler Event -r
+
+![Rotar do Resource]()
 
 ## Licença
 
