@@ -322,11 +322,11 @@ Agora a validação foi entrega para uma camada acima para fazer o serviço.
 
 Criando um controller com o resource defindo
 
->php artisan make:controler Event --resource
+>php artisan make:controller Event --resource
 ou
->php artisan make:controler Event -r
+>php artisan make:controller Event -r
 
-![Rotar do Resource]()
+![Rotas do Resource](https://github.com/dhelly/codeexperts-meus_eventos/blob/main/.git_assets/recurso.png)
 
 ## Licença
 
