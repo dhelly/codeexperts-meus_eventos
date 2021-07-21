@@ -1,4 +1,4 @@
-@extends('layout.site')
+@extends('layouts.site')
 
 @section('title') Listagem de Eventos @endsection
 

@@ -243,7 +243,79 @@ Nomeando e criando agrupamento
 	    });
 	});
 
+### Validações
 
+Nos controles
+
+	//validation
+	$request->validate([
+	    'title' => 'required|min:30',
+	    'description' => 'required',
+	    'body' => 'required',
+	    'start_event' => 'required'
+	], [
+	    'required' => 'Este campo é obrigatório',
+	    'min' => 'Este campo precisa ter no mínimo :min caracteres'
+	]);
+
+Nas views:
+
+	<div class="form-group mb-2">
+            <label>Titulo do Evento</label>
+            <input type="text" name="title" class="form-control {{ ($errors->has('title') ? 'is-invalid' : '') }}">
+
+            @error('title')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
+
+        </div>
+
+        <div class="form-group my-2">
+            <label>Descrição Rápida</label>
+            <input type="text" name="description" class="form-control {{ ($errors->has('description') ? 'is-invalid' : '') }}">
+
+            @if ($errors->has('description'))
+                <div class="invalid-feedback">
+                    @foreach ($errors->get('description') as $error)
+                        {{ $error }}
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+Lembrado que no Laravel existe várias formas para se chegar ao mesmo resultado, no exemplo acima mostramos duas formas.
+
+Trabalhar com o Request
+
+> php artisan make:request EventRequest
+
+Passamos as validações que colocamos no controller para o EventRequest no método rule
+
+	public function rules()
+	{
+	return [
+	    'title' => 'required|min:30',
+	    'description' => 'required',
+	    'body' => 'required',
+	    'start_event' => 'required'
+	];
+	}
+
+Setamos o *authorize()* para true
+
+Sobrescrevemos o método *message()* no request e adicionamos nossa tradução
+
+	public function message()
+	{
+		return [
+		    'required' => 'Este campo é obrigatório',
+		    'min' => 'Este campo precisa ter no mínimo :min caracteres'
+		];
+	}
+
+Agora a validação foi entrega para uma camada acima para fazer o serviço.
 
 
 ## Licença

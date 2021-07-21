@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EventRequest;
 use Illuminate\Support\Str;
 
 class EventController extends Controller
@@ -21,8 +22,9 @@ class EventController extends Controller
         return view('admin.events.create');
     }
 
-    public function store(Request $request)
+    public function store(EventRequest $request)
     {
+
         $event = $request->all();
         $event['slug'] = Str::slug($event['title']);
 
@@ -37,7 +39,7 @@ class EventController extends Controller
         return view('admin.events.edit', compact('event'));
     }
 
-    public function update($event, Request $request)
+    public function update($event, EventRequest $request)
     {
 
         $event = Event::findOrFail($event);
