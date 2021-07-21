@@ -13,7 +13,7 @@
 
     <div class="row mb-4">
         @forelse ($events as $event)
-            <div class="col-4">
+            <div class="col-12 col-sm-6 col-lg-4 col-xxl-3 my-3">
                 <div class="card">
                     <img src="https://via.placeholder.com/1024x480.png/001177?text=Sem+Image" alt="" class="card-img-top">
                     <div class="card-body">
@@ -26,9 +26,11 @@
                 </div>
             </div>
 
+            {{--
             @if (($loop->iteration % 3) == 0)
                 </div><div class="row mb-4">
             @endif
+            --}}
         @empty
             <div class="col-12">
                 <div class="alert alert-warning">
