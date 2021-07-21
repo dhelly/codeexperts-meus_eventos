@@ -206,6 +206,42 @@ Para usar a paginação do bootstrap temos que modificar
 
 	Paginator::useBootstrap();
 	
+### Refatorando as Rotas
+
+Nomeando e criando agrupamento
+
+	// Event
+	Route::prefix('/admin')->name('admin.')->group(function () {
+	    Route::prefix('/events')->name('events.')->group(function () {
+
+		Route::get('/', [
+		        \App\Http\Controllers\Admin\EventController::class,
+		        'index'])->name('index');
+
+		Route::get('/create', [
+		        \App\Http\Controllers\Admin\EventController::class,
+		        'create'
+		    ])->name('create');
+		Route::post('/store', [
+		        \App\Http\Controllers\Admin\EventController::class,
+		        'store'
+		    ])->name('store');
+
+		Route::get('/{event}/edit', [
+		        \App\Http\Controllers\Admin\EventController::class,
+		        'edit'
+		    ])->name('edit');
+		Route::post('/update/{event}', [
+		        \App\Http\Controllers\Admin\EventController::class,
+		        'update'
+		        ])->name('update');
+
+		Route::get('/destroy/{event}', [
+		        \App\Http\Controllers\Admin\EventController::class,
+		        'destroy'
+		    ])->name('destroy');
+	    });
+	});
 
 
 
