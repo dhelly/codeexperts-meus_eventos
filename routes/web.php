@@ -27,33 +27,18 @@ Route::get('eventos/{slug}', [HomeController::class, 'show'])->name('event.singl
 
 // Event
 Route::prefix('/admin')->name('admin.')->group(function () {
-    Route::prefix('/events')->name('events.')->group(function () {
 
-        Route::get('/', [
-                \App\Http\Controllers\Admin\EventController::class,
-                'index'])->name('index');
+    Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
+    Route::resource('events.photos', \App\Http\Controllers\Admin\EventPhotoController::class);
 
-        Route::get('/create', [
-                \App\Http\Controllers\Admin\EventController::class,
-                'create'
-            ])->name('create');
-        Route::post('/store', [
-                \App\Http\Controllers\Admin\EventController::class,
-                'store'
-            ])->name('store');
-
-        Route::get('/{event}/edit', [
-                \App\Http\Controllers\Admin\EventController::class,
-                'edit'
-            ])->name('edit');
-        Route::post('/update/{event}', [
-                \App\Http\Controllers\Admin\EventController::class,
-                'update'
-                ])->name('update');
-
-        Route::get('/destroy/{event}', [
-                \App\Http\Controllers\Admin\EventController::class,
-                'destroy'
-            ])->name('destroy');
-    });
+    //Event another options
+    // Route::resources(
+    //     [
+    //         'events' => \App\Http\Controllers\Admin\EventController::class,
+    //         'events.photos' => \App\Http\Controllers\Admin\EventPhotoController::class
+    //     ],
+    //     [
+    //         'except' => ['destroy']
+    //     ]
+    // );
 });

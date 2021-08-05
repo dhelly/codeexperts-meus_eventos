@@ -1,5 +1,7 @@
 # Laravel Estudos
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+
+<a href="https://packagist.org/packages/laravel/framework">
+<img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
 ## Sobre o Laravel Mastery
@@ -7,33 +9,41 @@
 Curso de laravel da plataforma [Code Experts](https://codeexperts.com.br/). Instrutor Nanderson Castro.
 
 ### Recursos e Ferramentas
+
 - [Laravel versão 8](https://laravel.com/)
 - [Vscode](https://code.visualstudio.com/)
 - [Dbeaver](https://dbeaver.io/ )
 
 ## Projeto
 
-**Projeto inicial: meusEventos**
+### Projeto inicial: meusEventos
 
 - Instalando o laravel via composer
+
 > composer global require laravel/installer
 
 - Criar um projeto no laravel
+
 > laravel new meusEventos
 
 - Executar o servidor embutido
-> php artisan serve 
+
+> php artisan serve
 
 - Criar um arquivo de migração
+
 > php artisan make:migration create_events_table
 
 - Rodando as migrations
+
 > php artisan migrate
 
 - Criando um model
+
 > php artisan make:model Event
 
 - Tinker - Terminal do laravel. Ótima ferramenta para depurar código.
+
 > php artisan tinker
 
 ---
@@ -50,46 +60,48 @@ Criando a seed *user* e *event*
 Alterando a table *event*
 > php artisan make:migration alter_events_table_add_column_slug --table=events
 
-Atualizando e apagando 
-> php artisan migrate:refresh --seed
---- 
-### Eloquent
-Active record 
+Atualizando e apagando
 
-	$event = new \App\Model\Event();
-	$event->title = "Evento";
-	$event->description = "Descrição do evento";
-	$event->body = "corpo do evento";
-	$event->start_event = date('Y-m-d H:i:s');
-	$event->slug = \Illuminate\Support\Str::slug($event->title);
-	 
-	$event->save();
- 
+> php artisan migrate:refresh --seed
+---
+
+### Eloquent
+
+Active record
+
+    $event = new \App\Model\Event();
+    $event->title = "Evento";
+    $event->description = "Descrição do evento";
+    $event->body = "corpo do evento";
+    $event->start_event = date('Y-m-d H:i:s');
+    $event->slug = \Illuminate\Support\Str::slug($event->title);
+        
+    $event->save();
 
 Mass Assignment
 
-	$event = [
-		'title' => 'Titulo',
-		'description'=> 'descricao',
-		'body' => 'corpo',
-		'slug' => '',
-		'start_event' => date('Y-m-d H:i:s')
-	];
-	
-	\App\Model\Event::create($event);
+    $event = [
+        'title' => 'Titulo',
+        'description'=> 'descricao',
+        'body' => 'corpo',
+        'slug' => '',
+        'start_event' => date('Y-m-d H:i:s')
+    ];
+
+    \App\Model\Event::create($event);
 
 É necessário configurar o fillable
 | protected $fillable = ['title', 'description', 'body', 'start_event', 'slug'];
 
+### Controller
 
-### Controler
 Event
 > php artisan make:controller EventController
 
 Criando a tabela *profile*
 > php artisan make:model Profile -m
 
-	Schema::create('profiles', function (Blueprint $table) {
+    Schema::create('profiles', function (Blueprint $table) {
         $table->id();
 
         $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -106,15 +118,15 @@ Criando a tabela *profile*
 
 Método *Definition*
 
-	'photo' => $this->faker->imageUrl(),
+    'photo' => $this->faker->imageUrl(),
 
 > php artisan make:factory ProfileFactory
 
 Método *Definition*
 
-	'about' => $this->faker->paragraph,
-	'phone' => $this->faker->phoneNumber,
-	'social_network' => 'facebook-twitter-instagram'
+    'about' => $this->faker->paragraph,
+    'phone' => $this->faker->phoneNumber,
+    'social_network' => 'facebook-twitter-instagram'
 
 No tinker
 
@@ -151,17 +163,17 @@ Alternativa
 
 Event:
 
-	Event::factory(30)
+    Event::factory(30)
         ->hasPhotos(4)
         ->hasCategories(3)
         ->create();
 
 User
 
-	User::factory(50)
+    User::factory(50)
         ->hasProfile()
         ->create();
-			
+
 Para executar:
 > php artisan migrate:fresh e php artisan db:seed
 
@@ -172,30 +184,30 @@ ou
 
 Passando valores nas rotas
 
-	Route::get('/', function () {
-	    $events = Event::all();
-	    return view('welcome', [
-		'events' => $events
-	    ]);
-	});
+    Route::get('/', function () {
+        $events = Event::all();
+        return view('welcome', [
+        'events' => $events
+        ]);
+    });
 
 outra opção é usando a função *compact()* do php
 
-	Route::get('/', function () {
-	    $events = Event::all();
-	    return view('welcome', compact('events'));
-	});
+    Route::get('/', function () {
+        $events = Event::all();
+        return view('welcome', compact('events'));
+    });
 
 
 Resolvendo problema da função *format()* para o **start_event** do Model Event e transformar o start_event em uma instância do carbon
 
 Model Event:
 
-	protected $dates = ['start_event'];
+    protected $dates = ['start_event'];
 
 No blade:
 
-	<strong>{{ $event->start_event->format('d/m/Y H:i:s') }}</strong>
+    <strong>{{ $event->start_event->format('d/m/Y H:i:s') }}</strong>
 
 ### Formulários
 
@@ -204,63 +216,63 @@ Para usar a paginação do bootstrap temos que modificar
 1 - abrir o arquivo `app\Providers\AppServiceProvider.php`
 2 - adicionar ao método `register`:
 
-	Paginator::useBootstrap();
-	
+    Paginator::useBootstrap();
+
 ### Refatorando as Rotas
 
 Nomeando e criando agrupamento
 
-	// Event
-	Route::prefix('/admin')->name('admin.')->group(function () {
-	    Route::prefix('/events')->name('events.')->group(function () {
+    // Event
+    Route::prefix('/admin')->name('admin.')->group(function () {
+        Route::prefix('/events')->name('events.')->group(function () {
 
-		Route::get('/', [
-		        \App\Http\Controllers\Admin\EventController::class,
-		        'index'])->name('index');
+        Route::get('/', [
+                \App\Http\Controllers\Admin\EventController::class,
+                'index'])->name('index');
 
-		Route::get('/create', [
-		        \App\Http\Controllers\Admin\EventController::class,
-		        'create'
-		    ])->name('create');
-		Route::post('/store', [
-		        \App\Http\Controllers\Admin\EventController::class,
-		        'store'
-		    ])->name('store');
+        Route::get('/create', [
+                \App\Http\Controllers\Admin\EventController::class,
+                'create'
+            ])->name('create');
+        Route::post('/store', [
+                \App\Http\Controllers\Admin\EventController::class,
+                'store'
+            ])->name('store');
 
-		Route::get('/{event}/edit', [
-		        \App\Http\Controllers\Admin\EventController::class,
-		        'edit'
-		    ])->name('edit');
-		Route::post('/update/{event}', [
-		        \App\Http\Controllers\Admin\EventController::class,
-		        'update'
-		        ])->name('update');
+        Route::get('/{event}/edit', [
+                \App\Http\Controllers\Admin\EventController::class,
+                'edit'
+            ])->name('edit');
+        Route::post('/update/{event}', [
+                \App\Http\Controllers\Admin\EventController::class,
+                'update'
+                ])->name('update');
 
-		Route::get('/destroy/{event}', [
-		        \App\Http\Controllers\Admin\EventController::class,
-		        'destroy'
-		    ])->name('destroy');
-	    });
-	});
+        Route::get('/destroy/{event}', [
+                \App\Http\Controllers\Admin\EventController::class,
+                'destroy'
+            ])->name('destroy');
+        });
+    });
 
 ### Validações
 
 Nos controles
 
-	//validation
-	$request->validate([
-	    'title' => 'required|min:30',
-	    'description' => 'required',
-	    'body' => 'required',
-	    'start_event' => 'required'
-	], [
-	    'required' => 'Este campo é obrigatório',
-	    'min' => 'Este campo precisa ter no mínimo :min caracteres'
-	]);
+    //validation
+    $request->validate([
+        'title' => 'required|min:30',
+        'description' => 'required',
+        'body' => 'required',
+        'start_event' => 'required'
+    ], [
+        'required' => 'Este campo é obrigatório',
+        'min' => 'Este campo precisa ter no mínimo :min caracteres'
+    ]);
 
 Nas views:
 
-	<div class="form-group mb-2">
+    <div class="form-group mb-2">
         <label>Titulo do Evento</label>
         <input type="text" name="title" class="form-control {{ ($errors->has('title') ? 'is-invalid' : '') }}">
 
@@ -293,30 +305,29 @@ Trabalhar com o Request
 
 Passamos as validações que colocamos no controller para o EventRequest no método rule
 
-	public function rules()
-	{
-	return [
-	    'title' => 'required|min:30',
-	    'description' => 'required',
-	    'body' => 'required',
-	    'start_event' => 'required'
-	];
-	}
+    public function rules()
+    {
+    return [
+        'title' => 'required|min:30',
+        'description' => 'required',
+        'body' => 'required',
+        'start_event' => 'required'
+    ];
+    }
 
 Setamos o *authorize()* para true
 
 Sobrescrevemos o método *message()* no request e adicionamos nossa tradução
 
-	public function message()
-	{
-		return [
-		    'required' => 'Este campo é obrigatório',
-		    'min' => 'Este campo precisa ter no mínimo :min caracteres'
-		];
-	}
+    public function message()
+    {
+        return [
+            'required' => 'Este campo é obrigatório',
+            'min' => 'Este campo precisa ter no mínimo :min caracteres'
+        ];
+    }
 
 Agora a validação foi entrega para uma camada acima para fazer o serviço.
-
 
 ### Controllers como Recurso
 
@@ -327,6 +338,37 @@ ou
 >php artisan make:controller Event -r
 
 ![Rotas do Resource](https://github.com/dhelly/codeexperts-meus_eventos/blob/main/.git_assets/recurso.png)
+
+Recursos Aninhados
+Criamos uma rota com recurso manualmente
+
+    Route::resource('events.photos', \App\Http\Controllers\Admin\EventPhotoController::class);
+
+Criamos o controller
+> php artisan make:controller Admin\\EventPhotoController -r
+
+![Rotas do Resource Aninhados](https://github.com/dhelly/codeexperts-meus_eventos/blob/main/.git_assets/recurso_aninhado.png)
+Outra forma de aninhar as rotas
+    Route::resources(
+        [
+            'events' => \App\Http\Controllers\Admin\EventController::class,
+            'events.photos' => \App\Http\Controllers\Admin\EventPhotoController::class
+        ],
+        [
+            'except' => ['destroy']
+        ]
+    );
+
+![Listagem de Rotas](https://github.com/dhelly/codeexperts-meus_eventos/blob/main/.git_assets/listagem_rotas.png)
+
+Delegando ao construtor a injeção de dependência do Model no controler Events
+
+    private $event;
+
+    public function __construct(Event $event)
+    {
+        $this->event = $event;
+    }
 
 ## Licença
 
