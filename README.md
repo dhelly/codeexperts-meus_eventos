@@ -361,7 +361,7 @@ Outra forma de aninhar as rotas
 
 ![Listagem de Rotas](https://github.com/dhelly/codeexperts-meus_eventos/blob/main/.git_assets/listagem_rotas.png)
 
-Delegando ao construtor a injeção de dependência do Model no controler Events
+Delegando ao construtor a injeção de dependência do Model no controller Events
 
     private $event;
 
