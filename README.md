@@ -348,7 +348,9 @@ Criamos o controller
 > php artisan make:controller Admin\\EventPhotoController -r
 
 ![Rotas do Resource Aninhados](https://github.com/dhelly/codeexperts-meus_eventos/blob/main/.git_assets/recurso_aninhado.png)
+
 Outra forma de aninhar as rotas
+
     Route::resources(
         [
             'events' => \App\Http\Controllers\Admin\EventController::class,
@@ -369,6 +371,24 @@ Delegando ao construtor a injeção de dependência do Model no controller Event
     {
         $this->event = $event;
     }
+
+### Laravel UI
+
+Instalando pacote
+
+> composer require laravel/ui
+
+Gerando agora as telas de autenticação e os presets do projeto para o bootstrap, que já estamos trabalhando, com telas de autenticação(flag --auth)
+
+> php artisan ui bootstrap --auth
+
+Scaffolding criados... rodar os comandos
+
+> npm install && npm run dev
+
+Erro no linux: Skipping 'fsevents' build as platform linux is not supported
+
+> npm install -f
 
 ## Licença
 
