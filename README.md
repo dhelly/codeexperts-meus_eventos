@@ -390,6 +390,59 @@ Erro no linux: Skipping 'fsevents' build as platform linux is not supported
 
 > npm install -f
 
+Conectar um evento a um usuário
+
+1 - Criando a migração
+
+> php artisan make:migration alter_table_events_add_column_owner_id --table=events
+
+Na migration
+
+    $table->foreignId('owner_id')->nullable()->constrained('users')->cascadeOnDelete();
+
+Lembrando que a definição *users* como parâmetro é devido ao nome da nossa coluna não ser o nome da tabela.A exclusão da coluna se dá pela composição do nome da tabela + nome da coluna + palavra "foreign'
+
+    $table->dropForeign('events_owner_id_foreign');
+    $table->dropColumn('owner_id');
+
+Lembrando de guarda a devida ordem de execução da tabela
+
+Mapear no Models os relacionamentos
+
+Em *event*:
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+Em *user*:
+
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'owner_id');
+    }
+
+O atributo *owner_id*, informa ao Laravel que o nome correto da coluna. Por conversão o laravel procurar a coluna *user_id*
+
+Construindo os mapeamentos nas seeds Users
+
+    public function run()
+    {
+        User::factory(50)
+                    ->has(
+                        Event::factory(30)
+                        ->hasPhotos(4)
+                        ->hasCategories(3)
+                    )
+                    ->hasProfile()
+                    ->create();
+    }
+
+Roda novamente:
+
+> php artisan migrate:refresh --seed
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).
