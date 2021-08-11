@@ -31,6 +31,19 @@ Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
     Route::resource('events.photos', \App\Http\Controllers\Admin\EventPhotoController::class);
 
+
+    /** Outra forma de usar o middleware com only e except*/
+    // Route::resource('events', \App\Http\Controllers\Admin\EventController::class)
+    //         ->except(['edit', 'update']);
+
+    // Route::resource('events', \App\Http\Controllers\Admin\EventController::class)
+    //         ->only(['edit', 'update'])
+    //         ->middleware(\App\Http\Middleware\CheckUserCanAccessEventToEditMiddleware::class);
+
+
+    // Route::resource('events', \App\Http\Controllers\Admin\EventController::class)
+    //         ->middleware('user.can.edit.event');
+
     //Event another options
     // Route::resources(
     //     [

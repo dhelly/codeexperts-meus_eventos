@@ -6,7 +6,7 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
-use Illuminate\Support\Str;
+use GuzzleHttp\Middleware;
 
 class EventController extends Controller
 {
@@ -15,6 +15,8 @@ class EventController extends Controller
     public function __construct(Event $event)
     {
         $this->event = $event;
+
+        $this->middleware('user.can.edit.event')->only(['edit', 'update']);
     }
 
     public function index()
@@ -33,7 +35,6 @@ class EventController extends Controller
     {
 
         $event = $request->all();
-        $event['slug'] = Str::slug($event['title']);
 
         $event = $this->event->create($event);
         $event->owner()->associate(auth()->user());

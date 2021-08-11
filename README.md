@@ -464,6 +464,87 @@ Método Store:
         return redirect()->route('admin.events.index');
     }
 
+### Melhorias no Projeto
+
+Accessors e Mutators - Exemplo do simples de uso no nosso projeto. Lembrando que eles tem prioridade de execução dentro do model
+
+    /** Accessos */
+
+    public function getTitleAttribute()
+    {
+        return 'Evento: ' . $this->attributes['title'];
+    }
+
+    public function getOwnerNameAttribute()
+    {
+        return !$this->owner ? 'Sem organizador' : $this->owner->name;
+    }
+
+    /** Mutators */
+    public function setTitleAttribute($value)
+    {
+        $this->attributes['title'] = $value;
+        $this->attributes['slug'] = Str::slug($value);
+    }
+
+Melhorando o campo de Inserção de data
+
+1 - Adicionar o pacote *ImputMask* como dependência de desenvolvimento(-D)
+
+> npm install inputmask -D
+
+2 - Adicionar no resource>js>bootstrap.js
+
+    var Inputmask = require('inputmask');
+
+3 - Adicionar aos formulários
+
+Criar e editar evento:
+
+    @section('scripts')
+        <script>
+            el = document.querySelector('input[name=start_event]');
+
+            let im = new Inputmask('99/99/9999 99:99:99');
+            im.mask(el);
+        </script>
+    @endsection
+
+4 - Criando um mutator para formatar
+
+    public function setStartEventAttribute($value)
+    {
+        $this->attributes['start_event'] = (\DateTime::createFromFormat('d/m/Y H:i', $value))
+                                            ->format('Y-m-d H:i');
+    }
+
+Criando um Middleware para evitar o acesso de eventos de outros usuários
+
+Criando o middleware
+
+> php artisan make:middleware CheckUserCanAccessEventToEditMiddleware
+
+Existem várias formas de incluir um middleware. Uma das formas mais usadas é colocar nas rotas, mas para situações como essa, que é preciso aplicar em apenas um método, uma solução possível é inserir diretamente no método. Essa forma será por nós utilizada.
+
+No construtor do Evento:
+
+    $this->middleware('user.can.edit.event')->only(['edit', 'update']);
+
+Para fazer um teste preliminar podemos usar o dd(__CLASS__) no middleware
+
+Implementando o middleware
+
+    public function handle(Request $request, Closure $next)
+    {
+
+        $event = Event::find($request->route()->parameter('event'));
+
+        if (!auth()->user()->events->contains($event)) {
+            abort(403);
+        }
+
+        return $next($request);
+    }
 
 ## Licença
 

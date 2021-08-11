@@ -21,6 +21,8 @@
                         <strong>Acontece em {{ $event->start_event->format('d/m/Y H:i:s') }}</strong>
                         <p class="card-text">{{ $event->description }}</p>
 
+                        <p>Evento Organizado por <a href="#">{{ $event->owner_name}}</a></p>
+
                         <a href="{{ route('event.single', ['slug' => $event->slug]) }}" class="btn btn-outline-dark">Ver Evento</a>
                     </div>
                 </div>
