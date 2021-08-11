@@ -443,6 +443,28 @@ Roda novamente:
 
 > php artisan migrate:refresh --seed
 
+Atribuindo o *owner* na filtragem de eventos. Ou seja, na listagem de eventos apenas os eventos criado pelo usuário será exibido.
+
+Método de listagem:
+
+    $events = auth()->user()->events()->paginate(10);
+
+Método Store:
+
+    public function store(EventRequest $request)
+    {
+
+        $event = $request->all();
+        $event['slug'] = Str::slug($event['title']);
+
+        $event = $this->event->create($event);
+        $event->owner()->associate(auth()->user());
+        $event->save();
+
+        return redirect()->route('admin.events.index');
+    }
+
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).

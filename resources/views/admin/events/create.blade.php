@@ -29,7 +29,12 @@
 
                 <div class="form-group mb-2">
                     <label>Titulo do Evento</label>
-                    <input type="text" name="title" class="form-control {{ ($errors->has('title') ? 'is-invalid' : '') }}">
+                    <input
+                        type="text"
+                        name="title"
+                        class="form-control {{ ($errors->has('title') ? 'is-invalid' : '') }}"
+                        value="{{ old('title') }}"
+                    >
 
                     @error('title')
                         <div class="invalid-feedback">
@@ -41,7 +46,12 @@
 
                 <div class="form-group my-2">
                     <label>Descrição Rápida</label>
-                    <input type="text" name="description" class="form-control {{ ($errors->has('description') ? 'is-invalid' : '') }}">
+                    <input
+                        type="text"
+                        name="description"
+                        class="form-control {{ ($errors->has('description') ? 'is-invalid' : '') }}"
+                        value="{{ old('description') }}"
+                    >
 
                     @if ($errors->has('description'))
                         <div class="invalid-feedback">
@@ -54,7 +64,12 @@
 
                 <div class="form-group my-2">
                     <label>Fale mais sobre o Evento</label>
-                    <textarea name="body" cols="30" rows="10" class="form-control {{ ($errors->has('body') ? 'is-invalid' : '') }}"></textarea>
+                    <textarea
+                        name="body"
+                        cols="30"
+                        rows="10"
+                        class="form-control {{ ($errors->has('body') ? 'is-invalid' : '') }}"
+                    >{{ old('body') }}</textarea>
 
                     @if ($errors->has('body'))
                         <div class="invalid-feedback">
@@ -67,7 +82,12 @@
 
                 <div class="form-group my-2">
                     <label>Quando vai acontecer</label>
-                    <input type="text" name="start_event" class="form-control {{ ($errors->has('start_event') ? 'is-invalid' : '') }}">
+                    <input
+                        type="text"
+                        name="start_event"
+                        class="form-control {{ ($errors->has('start_event') ? 'is-invalid' : '') }}"
+                        value="{{ old('start_event') }}"
+                    >
 
                     @if ($errors->has('start_event'))
                         <div class="invalid-feedback">

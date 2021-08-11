@@ -37,7 +37,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3">Nenhum evento cadastrado</td>
+                            <td colspan="4">Nenhum evento cadastrado</td>
                         </tr>
                     @endforelse
                 </tbody>
