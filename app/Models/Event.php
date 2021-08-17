@@ -53,4 +53,22 @@ class Event extends Model
         $this->attributes['start_event'] = (\DateTime::createFromFormat('d/m/Y H:i', $value))
                                             ->format('Y-m-d H:i');
     }
+
+    /** Our Methods */
+    public function getEventsHome($byCategory = null)
+    {
+        $events = $byCategory
+            ? $byCategory
+            : $this->orderBy('start_event', 'ASC');
+
+        $events->when($search = request()->query('s'), function ($queryBuilder) use ($search) {
+            $queryBuilder->where('title', 'LIKE', '%' . $search . '%');
+        });
+
+        // $events->whereRaw('DATE(start_event) >= DATE(NOW())');
+        $events->whereDate('start_event', '>=', now())->orderBy('start_event', 'ASC');
+
+        return $events;
+
+    }
 }

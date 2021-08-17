@@ -546,6 +546,100 @@ Implementando o middleware
         return $next($request);
     }
 
+Implementando o botão search
+
+View: site.blade.php:
+
+    <form class="form-inline my-2 my-lg-0">
+        <input
+            class="form-control mr-sm-2"
+            type="search"
+            placeholder="Buscar eventos..."
+            aria-label="Search"
+            name="s"
+            value="{{ request()->query('s') }}"
+        >
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+Controller Home:
+
+    public function index()
+    {
+        $events = $this->event
+            ->orderBy('start_event', 'DESC');
+
+        // if ($query = request()->query('s')) {
+        //     $events->where('title', 'LIKE', '%' . $query . '%');
+        // }
+
+        $events->when($search = request()->query('s'), function ($queryBuilder) use ($search) {
+            $queryBuilder->where('title', 'LIKE', '%' . $search . '%');
+        });
+
+        $events = $events->paginate(15);
+
+        // $events = [];
+        return view('home', compact('events'));
+    }
+
+Compartilhando categorias em todas as views do layout.site
+
+Usando AppServiceProvider
+
+    view()->share('categories', \App\Models\Category::all(['name', 'slug']));
+    //ou 
+    view()->composer('layouts.site', function ($view) {
+        $view->with('categories', \App\Models\Category::all(['name', 'slug']));
+    });
+
+Melhorando a view composer
+
+Criando uma pasta no "app\Http\Views\Composer". Criamos a classe *CategoriesViewComposer*
+
+    <?php
+
+    namespace App\Http\Views\Composer;
+
+    use App\Models\Category;
+
+    class CategoriesViewComposer
+    {
+        private $category;
+
+        public function __construct(Category $category)
+        {
+            $this->category = $category;
+        }
+
+        public function compose($view)
+        {
+            return $view->with('categories', $this->category->all(['name', 'slug']));
+        }
+    }
+
+Alteramos o ServiceProvide para chamar o nosso CategoriesViewComposer
+
+    view()->composer('layouts.site', 'App\Http\Views\Composer\CategoriesViewComposer@compose');
+
+Melhorando ainda mais: criando um provide para o código acima.
+Criar um provide
+
+> php artisan make:provider ViewComposerServiceProvider
+
+Copiamos o código para boot
+
+    view()->composer('layouts.site', 'App\Http\Views\Composer\CategoriesViewComposer@compose');
+
+Fazemos como o laravel reconheça nosso provider: na pasta config, no arquivo *app.php*, no método provider
+
+    App\Providers\ViewComposerServiceProvider::class,
+
+Melhorando o método *getEventHome* para só mostrar os eventos que ainda vão acontecer
+
+    // $events->whereRaw('DATE(start_event) >= DATE(NOW())');
+    $events->whereDate('start_event', '>=', now());
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).
