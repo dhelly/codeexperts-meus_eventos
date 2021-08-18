@@ -640,6 +640,90 @@ Melhorando o método *getEventHome* para só mostrar os eventos que ainda vão a
     // $events->whereRaw('DATE(start_event) >= DATE(NOW())');
     $events->whereDate('start_event', '>=', now());
 
+### Upload de Arquivos
+
+Permitindo um banner na chamada do evento
+
+> php artisan make:migration alter_events_table_add_banner_column --table=events
+
+Código da migration:
+
+    public function up()
+    {
+        Schema::table('events', function (Blueprint $table) {
+            $table->string('banner')->nullable();
+        });
+    }
+
+    public function down()
+    {
+        Schema::table('events', function (Blueprint $table) {
+            $table->dropColumn('banner');
+        });
+    }
+
+Rodar a migrate
+
+> php artisan migrate
+
+- Atualizar o fillable de *event*
+- Colocar o campo no formulário
+- Alterar o form para aceitar arquivo - enctype="multipart/form-data"
+
+Método store do Event
+
+    $banner = $request->file('banner');
+    $event = $request->all();
+    $event['banner'] = $banner->store('banner', 'public');
+    //or
+    $event['banner'] = $request->file('banner')->store('banner', 'public');
+
+Validando o tipo de arquivo enviado - Editar o arquivo *EventRequest.php*
+
+    public function rules()
+    {
+        return [
+            'title' => 'required|min:30',
+            'description' => 'required',
+            'body' => 'required',
+            'start_event' => 'required',
+            'banner' => 'image'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'required' => 'Este campo é obrigatório',
+            'min' => 'Este campo precisa ter no mínimo :min caracteres',
+            'image' => 'Arquivo de imagem inválido.'
+        ];
+    }
+
+Criar o link simbólico para pasta públic
+
+> php artisan storage:link
+
+Código para remoção da imagem quando for substituída
+
+    public function update($event, EventRequest $request)
+    {
+        $event = $this->event->findOrFail($event);
+        $eventData = $request->all();
+
+        if ($banner = $request->file('banner')) {
+            if (Storage::disk('public')->exists($event->banner)) {
+                Storage::disk('public')->delete($event->banner);
+            }
+            $eventData['banner'] = $banner->store('banner', 'public');
+        }
+
+
+        $event->update($eventData);
+
+        return redirect()->back();
+    }
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).

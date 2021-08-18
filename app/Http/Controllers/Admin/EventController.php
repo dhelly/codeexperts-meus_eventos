@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
 use GuzzleHttp\Middleware;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
@@ -33,8 +34,11 @@ class EventController extends Controller
 
     public function store(EventRequest $request)
     {
-
         $event = $request->all();
+
+        if ($banner = $request->file('banner')) {
+            $event['banner'] = $banner->store('banner', 'public');
+        }
 
         $event = $this->event->create($event);
         $event->owner()->associate(auth()->user());
@@ -51,10 +55,18 @@ class EventController extends Controller
 
     public function update($event, EventRequest $request)
     {
-
         $event = $this->event->findOrFail($event);
+        $eventData = $request->all();
 
-        $event->update($request->all());
+        if ($banner = $request->file('banner')) {
+            if (Storage::disk('public')->exists($event->banner)) {
+                Storage::disk('public')->delete($event->banner);
+            }
+            $eventData['banner'] = $banner->store('banner', 'public');
+        }
+
+
+        $event->update($eventData);
 
         return redirect()->back();
     }
