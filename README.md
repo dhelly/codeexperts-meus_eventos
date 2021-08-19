@@ -760,6 +760,26 @@ Controller:
         return redirect()->back();
     }
 
+Podemos criar um request para fazer a validação
+
+> php artisan make:request EventPhotoRequest
+
+Request:
+
+    public function rules()
+    {
+        return [
+            'photos.*' => 'image'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'image' => 'Um ou mais arquivos de imagem inválidos!'
+        ];
+    }
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).
