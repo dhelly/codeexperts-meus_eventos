@@ -29,7 +29,8 @@ Route::get('eventos/{slug}', [HomeController::class, 'show'])->name('event.singl
 Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
 
     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
-    Route::resource('events.photos', \App\Http\Controllers\Admin\EventPhotoController::class);
+    Route::resource('events.photos', \App\Http\Controllers\Admin\EventPhotoController::class)
+        ->only(['index', 'store', 'destroy']);
 
 
     /** Outra forma de usar o middleware com only e except*/

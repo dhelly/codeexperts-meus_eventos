@@ -724,6 +724,42 @@ Código para remoção da imagem quando for substituída
         return redirect()->back();
     }
 
+### Múltiplos Upload
+
+Formulário:
+Lembrar do CSRF, enctype e o atributo multiple no input file.
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <form action="{{ route('admin.events.photos.store', $event) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group">
+                    <label for="photos" class="font-weight-bold">Upload das Fotos do Evento</label>
+                    <input type="file" name="photos[]" id="photos" class="form-control bg-warning" multiple>
+                </div>
+                <button class="btn btn-lg btn-success">Enviar Foto do Evento</button>
+            </form>
+            <hr>
+
+            @dump($event->photos)
+        </div>
+    </div>
+
+Controller:
+
+    public function store(Request $request, $event)
+    {
+        $uploadPhotos = [];
+        foreach ($request->file('photos') as $photo) {
+            $uploadPhotos[] = ['photo' => $photo->store('events/photos', 'public')];
+        }
+
+        $event = \App\Models\Event::find($event);
+        $event->photos()->createMany($uploadPhotos);
+
+        return redirect()->back();
+    }
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).
