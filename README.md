@@ -780,6 +780,64 @@ Request:
         ];
     }
 
+Criando uma Trait para Upload
+
+Criamos uma pasta Trait no app:
+
+    <?php
+
+    namespace App\Traits;
+
+    use Illuminate\Http\UploadedFile;
+
+    trait UploadTrait
+    {
+        public function multipleFileUpload(array $files, string $folder, string $column)
+        {
+            $uploadedFiles = [];
+            foreach ($files as $file) {
+                $uploadedFiles[] = [$column => $this->upload($file, $folder)];
+            }
+
+            return $uploadedFiles;
+        }
+
+        public function upload(UploadedFile $file, string $folder)
+        {
+            return $file->store($folder, 'public');
+        }
+    }
+
+EventController:
+
+    use UpdateTrait;
+
+método store e upload alteramos:
+
+    if ($banner = $request->file('banner')) {
+        $event['banner'] = $this->upload($banner, 'events/banner');
+    }
+
+EventPhotoController:
+
+    public function store(EventPhotoRequest $request, Event $event)
+    {
+        $uploadPhotos = $this->multipleFileUpload($request->file('photos'), 'events/photos', 'photo');
+
+        $event->photos()->createMany($uploadPhotos);
+
+        return redirect()->back();
+    }
+
+Bloqueando o acesso a fotos de eventos que não são do usuário
+
+Apenas colocar o middleware:
+
+    public function __construct()
+    {
+        $this->middleware('user.can.edit.event');
+    }
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).

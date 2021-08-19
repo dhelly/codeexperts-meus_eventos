@@ -23,7 +23,7 @@
 
                         <p>Evento Organizado por <a href="#">{{ $event->owner_name}}</a></p>
 
-                        <a href="{{ route('event.single', ['slug' => $event->slug]) }}" class="btn btn-outline-dark">Ver Evento</a>
+                        <a href="{{ route('event.single', ['event' => $event->slug]) }}" class="btn btn-outline-dark">Ver Evento</a>
                     </div>
                 </div>
             </div>

@@ -8,9 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\UploadTrait;
 
 class EventController extends Controller
 {
+    use UploadTrait;
     private $event;
 
     public function __construct(Event $event)
@@ -37,7 +39,7 @@ class EventController extends Controller
         $event = $request->all();
 
         if ($banner = $request->file('banner')) {
-            $event['banner'] = $banner->store('banner', 'public');
+            $event['banner'] = $this->upload($banner, 'events/banner');
         }
 
         $event = $this->event->create($event);
@@ -47,22 +49,20 @@ class EventController extends Controller
         return redirect()->route('admin.events.index');
     }
 
-    public function edit($event)
+    public function edit(Event $event)
     {
-        $event = $this->event->findOrFail($event);
         return view('admin.events.edit', compact('event'));
     }
 
-    public function update($event, EventRequest $request)
+    public function update(Event $event, EventRequest $request)
     {
-        $event = $this->event->findOrFail($event);
         $eventData = $request->all();
 
         if ($banner = $request->file('banner')) {
             if (Storage::disk('public')->exists($event->banner)) {
                 Storage::disk('public')->delete($event->banner);
             }
-            $eventData['banner'] = $banner->store('banner', 'public');
+            $eventData['banner'] = $this->upload($banner, 'events/banner');
         }
 
 
@@ -71,9 +71,8 @@ class EventController extends Controller
         return redirect()->back();
     }
 
-    public function destroy($event)
+    public function destroy(Event $event)
     {
-        $event = $this->event->findOrFail($event);
         $event->delete();
 
         return redirect()->route('admin.events.index');

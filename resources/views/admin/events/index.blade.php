@@ -16,7 +16,7 @@
                         <th>#</th>
                         <th>Evento</th>
                         <th>Criado Em</th>
-                        <th>Ações</th>
+                        <th style="width: 30%;">Ações</th>
                     </tr>
                 </thead>
 
@@ -27,13 +27,16 @@
                             <td>{{ $event->title }}</td>
                             <td>{{ $event->created_at->format('d/m/Y H:i:s') }}</td>
                             <td class="d-flex">
-                                <a href="{{ route('admin.events.photos.index', ['event' => $event->id]) }}" class="btn btn-primary mx-1">Enviar Fotos</a>
                                 <a href="{{ route('admin.events.edit', ['event' => $event->id]) }}" class="btn btn-warning">Editar</a>
                                 <form action="{{ route('admin.events.destroy', ['event' => $event->id]) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger mx-1" onclick="return confirm('Você deseja realmente remover este item')">Remover</button>
+                                    <button
+                                    class="btn btn-danger mx-1"
+                                    onclick="return confirm('Você deseja realmente remover este item')"
+                                    >Remover</button>
                                 </form>
+                                <a href="{{ route('admin.events.photos.index', ['event' => $event->id]) }}" class="btn btn-primary mx-1">Enviar Fotos</a>
                             </td>
                         </tr>
                     @empty

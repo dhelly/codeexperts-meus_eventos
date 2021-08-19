@@ -80,7 +80,11 @@
                         <hr>
                     </div>
                     <div class="col-4">
-                        <img src="{{ asset('storage/'. $event->banner) }}" alt="Banner do Evento {{ $event->title }}" class="img-fluid">
+                        <img
+                            src="{{ $event->banner ? asset('storage/'. $event->banner) : 'https://via.placeholder.com/1024x480.png/001177?text=Sem+Image' }}"
+                            alt="Banner do Evento {{ $event->title }}"
+                            class="img-fluid"
+                        >
                     </div>
                     <div class="col-8">
                         <div class="form-group">

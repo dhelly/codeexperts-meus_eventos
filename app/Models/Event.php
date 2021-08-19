@@ -31,10 +31,10 @@ class Event extends Model
 
     /** Accessos */
 
-    public function getTitleAttribute()
-    {
-        return 'Evento: ' . $this->attributes['title'];
-    }
+    // public function getTitleAttribute()
+    // {
+    //     return 'Evento: ' . $this->attributes['title'];
+    // }
 
     public function getOwnerNameAttribute()
     {

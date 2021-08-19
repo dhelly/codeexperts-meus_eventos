@@ -5,11 +5,20 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventPhotoRequest;
 use App\Models\Event;
+use App\Traits\UploadTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class EventPhotoController extends Controller
 {
+
+    use UploadTrait;
+
+    public function __construct()
+    {
+        $this->middleware('user.can.edit.event');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,13 +47,7 @@ class EventPhotoController extends Controller
      */
     public function store(EventPhotoRequest $request, Event $event)
     {
-        $uploadPhotos = [];
-
-        if ($request->file('photos')) {
-            foreach ($request->file('photos') as $photo) {
-                $uploadPhotos[] = ['photo' => $photo->store('events/photos', 'public')];
-            }
-        }
+        $uploadPhotos = $this->multipleFileUpload($request->file('photos'), 'events/photos', 'photo');
 
         $event->photos()->createMany($uploadPhotos);
 
