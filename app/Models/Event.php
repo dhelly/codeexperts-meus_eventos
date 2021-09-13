@@ -29,6 +29,11 @@ class Event extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function enrolleds()
+    {
+        return $this->belongsToMany(User::class)->withPivot('reference', 'status');
+    }
+
     /** Accessos */
 
     // public function getTitleAttribute()
@@ -69,6 +74,5 @@ class Event extends Model
         $events->whereDate('start_event', '>=', now())->orderBy('start_event', 'ASC');
 
         return $events;
-
     }
 }

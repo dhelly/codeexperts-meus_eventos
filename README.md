@@ -838,6 +838,43 @@ Apenas colocar o middleware:
         $this->middleware('user.can.edit.event');
     }
 
+### Novas funcionalidades
+
+Permitir que um usuário se inscreva num evento
+
+> php artisan make:migration create_event_user_table
+
+    public function up()
+    {
+        Schema::create('event_user', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('event_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            $table->string('reference');
+            $table->string('status');
+        });
+    }
+
+Salvando dados numa tabela pivot. Testando com o Tinker
+
+>>> $e = \App\Models\Event::first()
+>>> $e->enrolleds()->sync([1 => ['reference' => '123456', 'status' => 'ACTIVE'], 2 => ['reference' => 'qw123', 'status' => 'ACTIVE']])
+
+O ID do evento(neste caso) é passado com o chave do array que contém os dados adicionais da tabela, que também são passados como array.
+
+Para Atualizar a variável no tinker
+
+> $e->refresh()
+
+Para que o Método de ligação da tabela Pivot mostre os campos adicionais é necessário especificar
+
+    public function enrolleds()
+    {
+        return $this->belongsToMany(User::class)->withPivot('reference', 'status');
+    }
+    
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).

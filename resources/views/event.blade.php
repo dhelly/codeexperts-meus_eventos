@@ -3,12 +3,30 @@
 @section('title') {{ $event->title }} @endsection
 
 @section('content')
+
+@if($event->banner)
+    <div class="row mb-3">
+        <div class="col-12 align">
+            <img
+                class="img-fluid d-block ml-auto mr-auto"
+                src="{{ asset('storage/'. $event->banner ) }}"
+                alt="Banner do Evento: {{ $event->title }}"
+            >
+        </div>
+    </div>
+@endif
+
 <div class="row mt-5">
-    <div class="col-12">
-        <h2>Evento: {{ $event->title }}</h2>
-        <p>
-            Evento acontecerá em {{ $event->start_event->format('d/m/Y H:i:s') }}
-        </p>
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <div>
+            <h2>Evento: {{ $event->title }}</h2>
+            <p>
+                Evento acontecerá em {{ $event->start_event->format('d/m/Y H:i:s') }}
+            </p>
+        </div>
+        <div>
+            <a href="{{ route('enrollment.start', $event->slug) }}" class="btn btn-ln btn-success">Inscrever-se</a>
+        </div>
     </div>
 </div>
 

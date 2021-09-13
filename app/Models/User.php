@@ -50,4 +50,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(Event::class, 'owner_id');
     }
+
+    public function tickets()
+    {
+        return $this->belongsToMany(Events::class)
+                    // ->as('tickets') Muda o nome da referencia
+                    ->withPivot('reference', 'status');
+    }
 }
