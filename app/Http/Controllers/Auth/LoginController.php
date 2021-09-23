@@ -37,4 +37,11 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function authenticated()
+    {
+        if (session()->has('enrollments')) {
+            redirect()->route('enrollment.confirm');
+        }
+    }
 }

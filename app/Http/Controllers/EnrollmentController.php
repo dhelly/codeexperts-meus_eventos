@@ -27,6 +27,21 @@ class EnrollmentController extends Controller
 
     public function process()
     {
-        dd('aqui');
+        if (!session()->has('enrollment')) {
+            return redirect()->route('home');
+        }
+
+        $event = Event::find(session('enrollment'));
+
+        $event->enrolleds()->attach([
+                    auth()->id() => [
+                        'reference' => uniqid(),
+                        'status' => 'ACTIVE'
+                    ]
+                ]);
+
+        session()->forget('enrollment');
+
+        return redirect()->route('event.single', $event->slug);
     }
 }

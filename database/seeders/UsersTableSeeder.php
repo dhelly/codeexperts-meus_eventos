@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
     {
         User::factory(50)
                     ->has(
-                        Event::factory(30)
+                        Event::factory(5)
                         ->hasPhotos(4)
                         ->hasCategories(4)
                     )

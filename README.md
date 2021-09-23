@@ -873,7 +873,30 @@ Para que o Método de ligação da tabela Pivot mostre os campos adicionais é n
     {
         return $this->belongsToMany(User::class)->withPivot('reference', 'status');
     }
-    
+
+### Redirecionamento do usuário após o registro para cadastro em evento
+
+Vamos reescrever o método do *RegisterController*. Se o usuário estiver fazendo o registro para participar de um evento, ele será redirecionado para tela de confirmação da inscrição após o registro.
+
+    protected function registered(Request $request, $user)
+    {
+        if (session()->has('enrollments')) {
+            redirect()->route('enrollment.confirm');
+        }
+    }
+
+Se quiser que o usuário que já exista, faça o login e seja direcionado para a página de confirmação, é só rescrever o método *authenticated* do *LoginController*
+
+    public function authenticate()
+    {
+        if (session()->has('enrollments')) {
+            redirect()->route('enrollment.confirm');
+        }
+    }
+
+Nas duas situações o laravel continuar a execução normal do método se não entrar no *if*
+
+O método *authenticated* também é utilizado quando se quer avisar que houve um login na conta do usuário.
 
 ## Licença
 
