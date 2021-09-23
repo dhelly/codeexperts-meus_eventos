@@ -898,6 +898,32 @@ Nas duas situações o laravel continuar a execução normal do método se não 
 
 O método *authenticated* também é utilizado quando se quer avisar que houve um login na conta do usuário.
 
+### Envio de Email de confirmação de inscrição para o usuário
+
+> php artisan make:mail UserEnrollmentMail
+
+Criamos uma view que **email>enrollment-user.blade.php**
+
+Observação: Definir uma propriedade public na classe, o laravel automaticamente já disponibiliza para a chamada dos métodos. (ainda não sei se isso é bom ou é ruim, pois quebra a função do encapsulamento).
+
+Método build, responsável por compor nossa mensagem.
+
+    public function build()
+    {
+        return $this
+                ->subject('Confirmação de Inscrição')
+                ->view('emails.enrollment-user');
+    }
+
+Antes de redirecionar o usuário após a inscrição fazemos a chamada para o envio de email.
+
+    $user = auth()->user();
+    Mail::to($user)
+        ->send(new UserEnrollmentMail($user, $event))
+    ;
+
+Precisamos configurar os dados do servidor de email no arquivo *.env*
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).
