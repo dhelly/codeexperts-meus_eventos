@@ -6,6 +6,7 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EventRequest;
+use App\Models\Category;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\UploadTrait;
@@ -31,7 +32,8 @@ class EventController extends Controller
 
     public function create()
     {
-        return view('admin.events.create');
+        $categories = Category::all(['id', 'name']);
+        return view('admin.events.create', compact('categories'));
     }
 
     public function store(EventRequest $request)
@@ -46,12 +48,17 @@ class EventController extends Controller
         $event->owner()->associate(auth()->user());
         $event->save();
 
+        if ($categories = $request->get('categories')) {
+            $event->categories()->sync($categories);
+        }
+
         return redirect()->route('admin.events.index');
     }
 
     public function edit(Event $event)
     {
-        return view('admin.events.edit', compact('event'));
+        $categories = Category::all(['id', 'name']);
+        return view('admin.events.edit', compact('event', 'categories'));
     }
 
     public function update(Event $event, EventRequest $request)
@@ -65,8 +72,11 @@ class EventController extends Controller
             $eventData['banner'] = $this->upload($banner, 'events/banner');
         }
 
-
         $event->update($eventData);
+
+        if ($categories = $request->get('categories')) {
+            $event->categories()->sync($categories);
+        }
 
         return redirect()->back();
     }

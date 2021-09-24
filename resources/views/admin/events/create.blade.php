@@ -97,6 +97,15 @@
                 @endif
             </div>
 
+            <div class="form-group">
+                <label>Categoria do Evento</label>
+                <select type="text" class="form-control" multiple name="categories[]">
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <button type="submit" class="btn btn-lg btn-success my-2">Criar Evento</button>
 
         </form>

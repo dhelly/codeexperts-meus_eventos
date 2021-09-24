@@ -32,7 +32,7 @@ class UserEnrollmentMail extends Mailable
     public function build()
     {
         return $this
-                ->subject('Confirmação de Inscrição')
+                ->subject('🛸 Confirmação de Inscrição')
                 ->view('emails.enrollment-user');
     }
 }

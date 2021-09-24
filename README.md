@@ -924,6 +924,15 @@ Antes de redirecionar o usuário após a inscrição fazemos a chamada para o en
 
 Precisamos configurar os dados do servidor de email no arquivo *.env*
 
+### Bloqueando inscrição no mesmo evento
+
+Colocaremos a verificação no método **confirm**
+
+    if ($event->enrolleds->contains(auth()->user())) {
+        return redirect()->route('event.single', $event->slug);
+    }
+
+
 ## Licença
 
 [MIT license](https://opensource.org/licenses/MIT).
