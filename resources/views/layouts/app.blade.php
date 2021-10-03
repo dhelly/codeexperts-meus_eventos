@@ -143,17 +143,30 @@
 
 </head>
 <body>
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+<nav class="navbar navbar-dark navbar-expand-lg justify-content-between sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="{{route('admin.events.index')}}">Meus Eventos</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <ul class="navbar-nav px-3">
+    <ul class="navbar-nav px-3 flex-row">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{ auth()->user()->name }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a href="{{ route('admin.profile.edit') }}" class="dropdown-item">Meu Perfil</a>
+
+                <a class="dropdown-item" href="#" onclick="event.preventDefault();document.getElementById('logout').submit()">Sair</a>
+                <form action="{{ route('logout') }}" method="post" id="logout">
+                    @csrf
+                </form>
+
+            </div>
+        </li>
+
         <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#" onclick="event.preventDefault();document.getElementById('logout').submit()">Sair</a>
-            <form action="{{ route('logout') }}" method="post" id="logout">
-                @csrf
-            </form>
+
         </li>
     </ul>
 </nav>

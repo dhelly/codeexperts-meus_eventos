@@ -46,6 +46,19 @@
                 >
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
+
+            <ul class="navbar-nav ml-2">
+                @auth
+                    <li class="nav-item">
+                        <a href="{{ route('admin.events.index') }}" class="btn btn-info" target="_blank">Meu Painel</a>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a href="{{ route('login') }}" class="btn btn-primary">Login</a>
+                    </li>
+                @endauth
+            </ul>
+
         </div>
     </nav>
 

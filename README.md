@@ -932,6 +932,37 @@ Colocaremos a verificação no método **confirm**
         return redirect()->route('event.single', $event->slug);
     }
 
+### Criação das validações para o Profile
+
+> php artisan make:request ProfileRequest
+
+Authorized para true
+
+    public function rules()
+    {
+        $rules = [
+            'user.name' => 'required',
+            'user.email' => 'required|email|unique:users,email,'.auth()->id(),
+        ];
+
+        if ($this->request->get('user')['password']) {
+            $rules['user.password'] = 'string|min:8|confirmed';
+        }
+
+        return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'required' => 'Estes campos são obrigatório',
+            'min' => 'O senha deve ter no mínimo ::min caracteres',
+            'confirmed' => 'A senha e a confirmação não são iguais',
+            'unique' => 'Este email já está cadastrado'
+        ];
+    }
+
+
 
 ## Licença
 

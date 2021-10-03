@@ -15,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('/', function () {
+//     $events = Event::all();
+//     return view('welcome', [
+//         'events' => $events
+//     ]);
+// });
+
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('eventos/{event:slug}', [HomeController::class, 'show'])->name('event.single');
@@ -33,10 +40,30 @@ Route::middleware('auth')->prefix('/admin')->name('admin.')->group(function () {
     Route::resource('events', \App\Http\Controllers\Admin\EventController::class);
     Route::resource('events.photos', \App\Http\Controllers\Admin\EventPhotoController::class)
         ->only(['index', 'store', 'destroy']);
-    Route::get('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'edit'])
-        ->name('profile.edit');
-    Route::put('profile', [\App\Http\Controllers\Admin\ProfileController::class, 'update'])
-        ->name('profile.update');
+
+
+    /** Outra forma de usar o middleware com only e except*/
+    // Route::resource('events', \App\Http\Controllers\Admin\EventController::class)
+    //         ->except(['edit', 'update']);
+
+    // Route::resource('events', \App\Http\Controllers\Admin\EventController::class)
+    //         ->only(['edit', 'update'])
+    //         ->middleware(\App\Http\Middleware\CheckUserCanAccessEventToEditMiddleware::class);
+
+
+    // Route::resource('events', \App\Http\Controllers\Admin\EventController::class)
+    //         ->middleware('user.can.edit.event');
+
+    //Event another options
+    // Route::resources(
+    //     [
+    //         'events' => \App\Http\Controllers\Admin\EventController::class,
+    //         'events.photos' => \App\Http\Controllers\Admin\EventPhotoController::class
+    //     ],
+    //     [
+    //         'except' => ['destroy']
+    //     ]
+    // );
 });
 
 Auth::routes();
